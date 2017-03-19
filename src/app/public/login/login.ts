@@ -6,8 +6,8 @@ import { UserService } from '../../services/user';
 @Component({
   // moduleId: module.id,
   selector: 'login',
-  templateUrl: 'login.html',
-  styleUrls: ['login.css'],
+  templateUrl: './login.html',
+  styleUrls: ['./login.css'],
   providers: [APIService]
 })
 export class Login implements OnInit {

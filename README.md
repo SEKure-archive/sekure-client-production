@@ -1,3 +1,27 @@
+I've overhalled the Angular 2 app to include the offical angular webpack.
+However, this does not have a cli.  As such web pack will strip .js .jpg .css and other files that are not white listed.
+
+Important:
+You must white list these in the .angular-cli.json folder
+Using @angular/compiler-cli": "2.4.0"
+
+This package is no longer supporting systemjs from the literature.
+Use the typings.d.ts moduel for third party js
+Use polyfills.ts for browser compatibility
+
+To get started.
+npm install -g @angular/cli
+
+launch server
+ng serve
+visit: localhost:4200
+
+production
+ng build
+view dist directory
+
+
+
 # SekureProduction
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.2.
