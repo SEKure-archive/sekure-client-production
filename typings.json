@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "jwt-decode": "registry:dt/jwt-decode#1.4.0+20160620211513"
+  }
+}
