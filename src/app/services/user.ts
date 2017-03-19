@@ -1,11 +1,9 @@
-// import * as jwt from 'jwt-decode/index';
 /// <reference path="../../../typings/modules/jwt-decode/index.d.ts" />
 import * as jwt from 'jwt-decode';
 import { Injectable } from '@angular/core';
 // import { CookieService } from 'angular2-cookie';
 import { CookieService } from 'angular2-cookie/core';
 const JWT_KEY: string = 'session';
-// https://github.com/salemdar/angular2-cookie#put
 
 
 

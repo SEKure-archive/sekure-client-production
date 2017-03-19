@@ -13,7 +13,7 @@ h3 {
 }
 
 .navbar {
-    background-image: url('/app/public/img/patterns/furley_bg.png');
+    background-image: url('/img/furley_bg.png');
     background-repeat: repeat-x;
     border-radius: 0;
     box-shadow: 2px 2px 4px #C0C0C0;

@@ -9,10 +9,10 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico",
-        "spinner.gif",
-        "app/public/img/patterns/furley_bg.png",
-        "app/public/img/icons/spinner.png"
+        "img/favicon.ico",
+        "img/spinner.gif",
+        "img/furley_bg.png",
+        "img/spinner.png"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -25,7 +25,6 @@
         "styles.css"
       ],
       "scripts": [
-        "systemjs.config.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

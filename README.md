@@ -12,6 +12,9 @@ Use polyfills.ts for browser compatibility
 To get started.
 npm install -g @angular/cli
 
+Make sure the post script runs
+typings install
+
 launch server
 ng serve
 visit: localhost:4200

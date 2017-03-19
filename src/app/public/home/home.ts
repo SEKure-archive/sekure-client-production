@@ -10,7 +10,6 @@ export class Flash {
 }
 
 @Component({
-  // moduleId: module.id,
   selector: 'home',
   templateUrl: 'home.html',
   styleUrls: ['home.css'],
@@ -31,13 +30,13 @@ export class Home implements OnInit {
     // Load folders on page load
     this.api.getALLFolders().subscribe(folders => {
       this.folders = folders;
-      // this.working = false;
+      this.working = false;
     }, error => {
       if (!this.user.isLoggedIn()) {
         this.router.navigate(['login']);
         this.user.setSessionExpired();
       } else {
-        // this.working = false;
+        this.working = false;
         this.flash.error = error;
       }
     });

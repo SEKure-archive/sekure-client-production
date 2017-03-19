@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { APIService, File } from '../../services/api';
 
 @Component({
-  // moduleId: module.id,
   selector: 'file',
   templateUrl: 'file.html',
   styleUrls: ['file.css'],

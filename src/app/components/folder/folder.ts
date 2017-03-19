@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { APIService, File, Folder } from '../../services/api';
 
 @Component({
-  // moduleId: module.id,
   selector: 'folder',
   templateUrl: 'folder.html',
   styleUrls: ['folder.css'],

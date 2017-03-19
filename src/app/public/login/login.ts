@@ -4,7 +4,6 @@ import { APIService } from '../../services/api';
 import { UserService } from '../../services/user';
 
 @Component({
-  // moduleId: module.id,
   selector: 'login',
   templateUrl: './login.html',
   styleUrls: ['./login.css'],
