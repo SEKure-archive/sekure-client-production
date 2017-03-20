@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'angular2-cookie/core';
 const JWT_KEY: string = 'session';
 
-
+// Cookies dont work on S3, CORS strips them
 
 /** A service that manages the currently logged in user. */
 @Injectable()
@@ -40,14 +40,16 @@ export class UserService {
     };
 
     this.username = username;
-    this.cookie.put(JWT_KEY, jwt, opts);
+    // this.cookie.put(JWT_KEY, jwt, opts);
+    localStorage.setItem(JWT_KEY, jwt);
     localStorage.setItem('username', username);
   }
 
   /** Unsets the current user and clears authentication information. */
   public unsetUser() {
     this.username = null;
-    this.cookie.remove(JWT_KEY);
+    // this.cookie.remove(JWT_KEY);
+    localStorage.removeItem(JWT_KEY);
     localStorage.removeItem('username');
   }
 
@@ -61,8 +63,8 @@ export class UserService {
 
   /** Returns the JWT of the currently logged in user, if any. */
   public getToken(): string {
-    // return localStorage.getItem(JWT_KEY);
-    return this.cookie.get(JWT_KEY);
+    return localStorage.getItem(JWT_KEY);
+    // return this.cookie.get(JWT_KEY);
   }
 
   public setSessionExpired(): void {

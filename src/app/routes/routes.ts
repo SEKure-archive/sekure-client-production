@@ -7,7 +7,10 @@ import { AuthGuard } from './authguard';
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: Login },
-  { path: 'home', component: Home, canActivate: [AuthGuard] },
+  { path: 'home', component: Home },
   { path: '**', redirectTo: 'login' },  // Comes last
 ];
 export const routing = RouterModule.forRoot(routes);
+
+
+// { path: 'home', component: Home, canActivate: [AuthGuard] },

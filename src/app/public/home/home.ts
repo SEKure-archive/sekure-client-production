@@ -34,14 +34,16 @@ export class Home implements OnInit {
     }, error => {
       if (!this.user.isLoggedIn()) {
         this.router.navigate(['login']);
-        this.user.setSessionExpired();
+        var isExpired = this.user.isSessionExpired();
+        if (isExpired){
+          this.user.setSessionExpired();
+        }
+        console.log("Your out of time, please log in again")
       } else {
         this.working = false;
         this.flash.error = error;
       }
     });
-
-  this.working = true;
   }
 
   private logout() {

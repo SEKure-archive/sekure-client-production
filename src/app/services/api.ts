@@ -43,8 +43,10 @@ function convertFolder(data: any): Folder {
 
 @Injectable()
 export class APIService {
-  private URL = 'http://172.17.0.2:80';
-  private timeOut = 3000;
+  // private URL = 'http://172.17.0.2:80';
+  private URL = 'http://52.2.133.118:80';
+
+  private timeOut = 10000;
   private headerTemplate: Headers;
 
   constructor(private http: Http, private user: UserService) {
