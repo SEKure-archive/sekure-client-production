@@ -141,4 +141,10 @@ export class APIService {
     var body = JSON.stringify({ 'folder_id': folder_id, name: fileName });
     return this.makeRequest(RequestMethod.Post, '/files', body, true);
   }
+
+
+  // *************************  RESTORE FILES   ********************************
+  getFileDownload(id: number) {
+    return this.makeRequest(RequestMethod.Get, `/files/${id}/download`, null, true);
+  }
 }
