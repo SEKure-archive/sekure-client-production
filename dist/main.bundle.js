@@ -48,7 +48,8 @@ var APIService = (function () {
         this.http = http;
         this.user = user;
         // private URL = 'http://172.17.0.2:80';
-        this.URL = 'http://52.2.133.118:80';
+        // private URL = 'http://52.2.133.118:80';
+        this.URL = 'https://api.sekurearchive.us';
         this.timeOut = 10000;
         console.log('Postservice initialized...');
     }
@@ -130,6 +131,10 @@ var APIService = (function () {
         var body = JSON.stringify({ 'folder_id': folder_id, name: fileName });
         return this.makeRequest(__WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Post, '/files', body, true);
     };
+    // *************************  RESTORE FILES   ********************************
+    APIService.prototype.getFileDownload = function (id) {
+        return this.makeRequest(__WEBPACK_IMPORTED_MODULE_1__angular_http__["e" /* RequestMethod */].Get, "/files/" + id + "/download", null, true);
+    };
     APIService = __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
         __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_http__["f" /* Http */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_7__user__["a" /* UserService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_7__user__["a" /* UserService */]) === 'function' && _b) || Object])
@@ -148,7 +153,7 @@ var APIService = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jwt_decode__ = __webpack_require__(696);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jwt_decode___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jwt_decode__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core__ = __webpack_require__(329);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core__ = __webpack_require__(330);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UserService; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -169,8 +174,9 @@ var JWT_KEY = 'session';
 var UserService = (function () {
     function UserService(cookie) {
         this.cookie = cookie;
+        this.domainName = 'sekurearchive.us';
         this.cookieExpires = 1; //Expire in an hour
-        this.cookieHTTPS = false; // Needs to be true for https
+        this.cookieHTTPS = true; // Needs to be true for https
         this.username = null;
     }
     UserService.prototype.setUser = function (username, jwt) {
@@ -180,20 +186,20 @@ var UserService = (function () {
         var value = 'jwt';
         var opts = {
             path: './services/user',
-            domain: 'localhost',
+            domain: this.domainName,
             expires: date,
             secure: this.cookieHTTPS,
         };
         this.username = username;
-        // this.cookie.put(JWT_KEY, jwt, opts);
-        localStorage.setItem(JWT_KEY, jwt);
+        this.cookie.put(JWT_KEY, jwt, opts);
+        // localStorage.setItem(JWT_KEY, jwt);
         localStorage.setItem('username', username);
     };
     /** Unsets the current user and clears authentication information. */
     UserService.prototype.unsetUser = function () {
         this.username = null;
-        // this.cookie.remove(JWT_KEY);
-        localStorage.removeItem(JWT_KEY);
+        this.cookie.remove(JWT_KEY);
+        // localStorage.removeItem(JWT_KEY);
         localStorage.removeItem('username');
     };
     /** Returns the username of the currently logged in user, if any. */
@@ -205,8 +211,8 @@ var UserService = (function () {
     };
     /** Returns the JWT of the currently logged in user, if any. */
     UserService.prototype.getToken = function () {
-        return localStorage.getItem(JWT_KEY);
-        // return this.cookie.get(JWT_KEY);
+        // return localStorage.getItem(JWT_KEY);
+        return this.cookie.get(JWT_KEY);
     };
     UserService.prototype.setSessionExpired = function () {
         localStorage.setItem('expired', 'true');
@@ -457,7 +463,53 @@ var Login = (function () {
 
 /***/ }),
 
-/***/ 378:
+/***/ 329:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user__ = __webpack_require__(109);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthGuard; });
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+var AuthGuard = (function () {
+    function AuthGuard(router, user) {
+        this.router = router;
+        this.user = user;
+    }
+    AuthGuard.prototype.canActivate = function () {
+        // Reroute to login form if no user is logged in
+        if (this.user.isLoggedIn()) {
+            return true;
+        }
+        else {
+            this.router.navigate(["login"]);
+            return false;
+        }
+    };
+    AuthGuard = __decorate([
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
+        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_user__["a" /* UserService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services_user__["a" /* UserService */]) === 'function' && _b) || Object])
+    ], AuthGuard);
+    return AuthGuard;
+    var _a, _b;
+}());
+//# sourceMappingURL=authguard.js.map
+
+/***/ }),
+
+/***/ 379:
 /***/ (function(module, exports) {
 
 function webpackEmptyContext(req) {
@@ -466,19 +518,19 @@ function webpackEmptyContext(req) {
 webpackEmptyContext.keys = function() { return []; };
 webpackEmptyContext.resolve = webpackEmptyContext;
 module.exports = webpackEmptyContext;
-webpackEmptyContext.id = 378;
+webpackEmptyContext.id = 379;
 
 
 /***/ }),
 
-/***/ 379:
+/***/ 380:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(460);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(491);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dynamic__ = __webpack_require__(461);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__app_app_module__ = __webpack_require__(492);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__environments_environment__ = __webpack_require__(498);
 
 
@@ -492,13 +544,13 @@ __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__angular_platform_browser_dyna
 
 /***/ }),
 
-/***/ 490:
+/***/ 491:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core__ = __webpack_require__(329);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core__ = __webpack_require__(330);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_angular2_cookie_core__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppComponent; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -533,26 +585,26 @@ var AppComponent = (function () {
 
 /***/ }),
 
-/***/ 491:
+/***/ 492:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_platform_browser__ = __webpack_require__(144);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_http__ = __webpack_require__(304);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routes_authguard__ = __webpack_require__(496);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routes_authguard__ = __webpack_require__(329);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_api__ = __webpack_require__(108);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_user__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_cookie_services_cookies_service__ = __webpack_require__(332);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_cookie_services_cookies_service__ = __webpack_require__(333);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_angular2_cookie_services_cookies_service___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6_angular2_cookie_services_cookies_service__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(490);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_file_file__ = __webpack_require__(492);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_folder_folder__ = __webpack_require__(493);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_spinner_spinner__ = __webpack_require__(494);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__app_component__ = __webpack_require__(491);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_file_file__ = __webpack_require__(493);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_folder_folder__ = __webpack_require__(494);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_spinner_spinner__ = __webpack_require__(495);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__routes_routes__ = __webpack_require__(497);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__public_home_home__ = __webpack_require__(327);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__public_login_login__ = __webpack_require__(328);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pipes_bytes__ = __webpack_require__(495);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__pipes_bytes__ = __webpack_require__(496);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -596,7 +648,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 492:
+/***/ 493:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -622,6 +674,13 @@ var FileComponent = (function () {
     FileComponent.prototype.toggleOpen = function () {
         this.open = !this.open;
     };
+    FileComponent.prototype.restoreFile = function () {
+        console.log("File info");
+        console.log(this.file.id);
+        console.log(this.file.name);
+        this.api.getFileDownload(this.file.id).subscribe(function (files) {
+        });
+    };
     __decorate([
         __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Input"])(), 
         __metadata('design:type', (typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_api__["File"] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__services_api__["File"]) === 'function' && _a) || Object)
@@ -646,7 +705,7 @@ var FileComponent = (function () {
 
 /***/ }),
 
-/***/ 493:
+/***/ 494:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -702,7 +761,7 @@ var FolderComponent = (function () {
 
 /***/ }),
 
-/***/ 494:
+/***/ 495:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -740,7 +799,7 @@ var SpinnerComponent = (function () {
 
 /***/ }),
 
-/***/ 495:
+/***/ 496:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -792,52 +851,6 @@ var BytesPipe = (function () {
 
 /***/ }),
 
-/***/ 496:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_router__ = __webpack_require__(105);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_user__ = __webpack_require__(109);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AuthGuard; });
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-var AuthGuard = (function () {
-    function AuthGuard(router, user) {
-        this.router = router;
-        this.user = user;
-    }
-    AuthGuard.prototype.canActivate = function () {
-        // Reroute to login form if no user is logged in
-        if (this.user.isLoggedIn()) {
-            return true;
-        }
-        else {
-            this.router.navigate(["login"]);
-            return false;
-        }
-    };
-    AuthGuard = __decorate([
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__angular_core__["Injectable"])(), 
-        __metadata('design:paramtypes', [(typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_1__angular_router__["a" /* Router */]) === 'function' && _a) || Object, (typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_user__["a" /* UserService */] !== 'undefined' && __WEBPACK_IMPORTED_MODULE_2__services_user__["a" /* UserService */]) === 'function' && _b) || Object])
-    ], AuthGuard);
-    return AuthGuard;
-    var _a, _b;
-}());
-//# sourceMappingURL=authguard.js.map
-
-/***/ }),
-
 /***/ 497:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -845,19 +858,20 @@ var AuthGuard = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_router__ = __webpack_require__(105);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__public_home_home__ = __webpack_require__(327);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__public_login_login__ = __webpack_require__(328);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__authguard__ = __webpack_require__(329);
 /* unused harmony export routes */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return routing; });
+
 
 
 
 var routes = [
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: 'login', component: __WEBPACK_IMPORTED_MODULE_2__public_login_login__["a" /* Login */] },
-    { path: 'home', component: __WEBPACK_IMPORTED_MODULE_1__public_home_home__["a" /* Home */] },
+    { path: 'home', component: __WEBPACK_IMPORTED_MODULE_1__public_home_home__["a" /* Home */], canActivate: [__WEBPACK_IMPORTED_MODULE_3__authguard__["a" /* AuthGuard */]] },
     { path: '**', redirectTo: 'login' },
 ];
 var routing = __WEBPACK_IMPORTED_MODULE_0__angular_router__["b" /* RouterModule */].forRoot(routes);
-// { path: 'home', component: Home, canActivate: [AuthGuard] },
 //# sourceMappingURL=routes.js.map
 
 /***/ }),
@@ -904,7 +918,7 @@ exports = module.exports = __webpack_require__(62)();
 
 
 // module
-exports.push([module.i, ".contents {\n    border-top: 1px solid #E3E3E3;\n    margin-left: 44px;\n    padding: 10px 0;\n    text-align: left;\n}\n\n.contents > p {\n    margin: 0;\n}\n\n.file {\n    background-color: #F9F9F9;\n    border-top: 1px solid #E3E3E3;\n    margin: 0;\n    padding: 0;\n}\n\n.file-even {\n    background-color: white;\n}\n\n.header {\n    height: 36px;\n    cursor: pointer;\n    font-size: 16px;\n    list-style-type: none;\n    line-height: 36px;\n    margin: 0;\n    padding: 0;\n    text-align: left;\n}\n\n.header > li {\n    display: inline-block;\n}\n\n.header > * > .glyphicon {\n    font-size: 16px;\n}\n\n.header > * > .glyphicon-chevron-down {\n    margin: 8px 4px 0 16px;\n}\n\n.header > * > .glyphicon-chevron-right {\n    margin: 8px 10px;\n}\n", ""]);
+exports.push([module.i, ".contents {\n    border-top: 1px solid #E3E3E3;\n    margin-left: 44px;\n    padding: 10px 0;\n    text-align: left;\n}\n\n.contents > p {\n    margin: 0;\n}\n\n.file {\n    background-color: #F9F9F9;\n    border-top: 1px solid #E3E3E3;\n    margin: 0;\n    padding: 0;\n}\n\n.file-even {\n    background-color: white;\n}\n\n.header {\n    height: 36px;\n    cursor: pointer;\n    font-size: 16px;\n    list-style-type: none;\n    line-height: 36px;\n    margin: 0;\n    padding: 0;\n    text-align: left;\n}\n\n.header > li {\n    display: inline-block;\n}\n\n.header > * > .glyphicon {\n    font-size: 16px;\n}\n\n.header > * > .glyphicon-chevron-down {\n    margin: 8px 4px 0 16px;\n}\n\n.header > * > .glyphicon-chevron-right {\n    margin: 8px 10px;\n}\n\n.nav > button {\n    margin: 8px 8px 0 0;\n}\n\n.click {\n    cursor: pointer;\n}\n", ""]);
 
 // exports
 
@@ -996,7 +1010,7 @@ module.exports = "<router-outlet></router-outlet>\n"
 /***/ 698:
 /***/ (function(module, exports) {
 
-module.exports = "<div class=\"file\" [class.file-even]=\"even\">\n  <ul class=\"header\" (click)=\"toggleOpen()\">\n    <li><div *ngIf=\"open\" class=\"glyphicon glyphicon-chevron-down\"></div></li>\n    <li><div *ngIf=\"!open\" class=\"glyphicon glyphicon-chevron-right\"></div></li>\n    <li><p>{{file.name}}</p></li>\n  </ul>\n  <div *ngIf=\"open\" class=\"contents\">\n    <p>Mime: {{file.mime}}</p>\n    <p>Size: {{file.size | bytes}}</p>\n  </div>\n</div>\n"
+module.exports = "<div class=\"file\" [class.file-even]=\"even\">\n  <ul class=\"header\" (click)=\"toggleOpen()\">\n    <li><div *ngIf=\"open\" class=\"glyphicon glyphicon-chevron-down\"></div></li>\n    <li><div *ngIf=\"!open\" class=\"glyphicon glyphicon-chevron-right\"></div></li>\n    <li><p>{{file.name}}</p></li>\n  </ul>\n  <div *ngIf=\"open\" class=\"contents\">\n  <button type=\"submit\" class=\"btn btn-default btn-danger\"  (click)=\"restoreFile()\">Restore</button>\n    <p>Mime: {{file.mime}}</p>\n    <p>Size: {{file.size | bytes}}</p>\n  </div>\n</div>\n"
 
 /***/ }),
 
@@ -1031,7 +1045,7 @@ module.exports = "<div class=\"main\">\n  <div class=\"wrapper\">\n    <div clas
 /***/ 734:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(379);
+module.exports = __webpack_require__(380);
 
 
 /***/ })

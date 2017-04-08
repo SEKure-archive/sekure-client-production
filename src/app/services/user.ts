@@ -14,13 +14,15 @@ export class UserService {
   private username: string;
   private cookieExpires: number;  // hours before expires
   private cookieHTTPS: boolean;
+  private domainName: string;
 
 
 
 
   constructor(private cookie: CookieService) {
+    this.domainName = 'sekurearchive.us'
     this.cookieExpires = 1;  //Expire in an hour
-    this.cookieHTTPS = false;  // Needs to be true for https
+    this.cookieHTTPS = true;  // Needs to be true for https
     this.username = null;
   }
 
@@ -34,22 +36,22 @@ export class UserService {
 
     let opts: CookieOptionsArgs = {
       path: './services/user',
-      domain: 'localhost',
+      domain: this.domainName,
       expires: date,
       secure: this.cookieHTTPS,
     };
 
     this.username = username;
-    // this.cookie.put(JWT_KEY, jwt, opts);
-    localStorage.setItem(JWT_KEY, jwt);
+    this.cookie.put(JWT_KEY, jwt, opts);
+    // localStorage.setItem(JWT_KEY, jwt);
     localStorage.setItem('username', username);
   }
 
   /** Unsets the current user and clears authentication information. */
   public unsetUser() {
     this.username = null;
-    // this.cookie.remove(JWT_KEY);
-    localStorage.removeItem(JWT_KEY);
+    this.cookie.remove(JWT_KEY);
+    // localStorage.removeItem(JWT_KEY);
     localStorage.removeItem('username');
   }
 
@@ -63,8 +65,8 @@ export class UserService {
 
   /** Returns the JWT of the currently logged in user, if any. */
   public getToken(): string {
-    return localStorage.getItem(JWT_KEY);
-    // return this.cookie.get(JWT_KEY);
+    // return localStorage.getItem(JWT_KEY);
+    return this.cookie.get(JWT_KEY);
   }
 
   public setSessionExpired(): void {
