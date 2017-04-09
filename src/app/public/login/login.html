@@ -15,7 +15,7 @@
           <div *ngIf="passwordError" class="alert alert-danger" role="alert"><b>Error:</b> {{passwordError}}</div>
         </div>
         <a [class.disabled]="working" class="btn btn-default" (click)="toggleLogin()">{{showLogin? "Sign Up" : "Login"}}</a>
-        <a [class.disabled]="working" class="btn btn-success pull-right" (click)="submitForm()">{{showLogin? "Login" : "Sign Up"}}</a>
+        <a [class.disabled]="working" class="btn btn-success pull-right" (click)="submitForm($event)">{{showLogin? "Login" : "Sign Up"}}</a>
         <div class="clearfix"></div>
       </form>
     </div>

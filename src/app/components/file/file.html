@@ -5,7 +5,7 @@
     <li><p>{{file.name}}</p></li>
   </ul>
   <div *ngIf="open" class="contents">
-  <button type="submit" class="btn btn-default btn-danger"  (click)="restoreFile()">Restore</button>
+  <button type="submit" class="btn btn-default btn-danger"  (click)="restoreFile($event)">Restore</button>
     <p>Mime: {{file.mime}}</p>
     <p>Size: {{file.size | bytes}}</p>
   </div>

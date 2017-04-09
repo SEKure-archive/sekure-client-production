@@ -47,7 +47,8 @@ export class Login implements OnInit {
     this.passwordError = null;
   }
 
-  submitForm() {
+  submitForm(e) {
+    e.preventDefault();
     // If an API call is in progress, ignore the button press.
     if (this.working) return;
 

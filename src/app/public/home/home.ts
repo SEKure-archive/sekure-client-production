@@ -46,7 +46,8 @@ export class Home implements OnInit {
     });
   }
 
-  private logout() {
+  private logout(e) {
+    e.preventDefault();
     this.user.unsetUser();
     this.router.navigate(['login']);
   }

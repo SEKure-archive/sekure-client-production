@@ -18,7 +18,8 @@ export class FileComponent {
     toggleOpen() {
         this.open = !this.open;
     }
-    private restoreFile() {
+    private restoreFile(e) {
+      e.preventDefault();
         console.log("File info");
         console.log(this.file.id);
         console.log(this.file.name);
