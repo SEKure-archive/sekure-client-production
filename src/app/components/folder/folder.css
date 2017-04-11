@@ -30,3 +30,9 @@
 .header > * > .glyphicon-folder-open {
     margin: 6px 5px 0 11px;
 }
+
+.btn {
+    float: right;
+    margin-top: 1px;
+
+}

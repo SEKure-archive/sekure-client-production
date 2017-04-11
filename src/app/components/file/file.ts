@@ -12,13 +12,15 @@ export class FileComponent {
     @Input() even: boolean;
 
     open: boolean = false;
+    // loaded: boolean = false;
 
     constructor(private api: APIService) { }
 
     toggleOpen() {
         this.open = !this.open;
+
     }
-    private restoreFile(e) {
+    public restoreFile(e) {
       e.preventDefault();
         console.log("File info");
         console.log(this.file.id);
