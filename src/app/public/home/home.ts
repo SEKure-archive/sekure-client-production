@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { APIService, Folder } from '../../services/api';
 import { UserService } from '../../services/user';
 
+
 /** Any currently displayed messages. */
 export class Flash {
   error: string = null;
@@ -44,6 +45,13 @@ export class Home implements OnInit {
         this.flash.error = error;
       }
     });
+  }
+
+
+  searchValue : string = "";
+
+  public setMessage(message : string){
+    this.flash.notification = message;
   }
 
   private logout(e) {

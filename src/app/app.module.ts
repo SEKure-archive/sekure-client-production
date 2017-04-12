@@ -4,6 +4,8 @@ import { BrowserModule } from '@angular/platform-browser';
 // import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+
 
 // providers
 import { AuthGuard } from './routes/authguard';
@@ -26,11 +28,12 @@ import { Login } from './public/login/login';
 
 // Pipes
 import { BytesPipe } from './pipes/bytes';
+import { SearchPipe } from './pipes/search';
 
 @NgModule({
-  imports: [BrowserModule, HttpModule, routing],
+  imports: [BrowserModule, HttpModule, routing, FormsModule],
   providers: [CookieService, AuthGuard, APIService, UserService],
-  declarations: [AppComponent, FileComponent, FolderComponent, SpinnerComponent, Home, Login, BytesPipe],
+  declarations: [AppComponent, FileComponent, FolderComponent, SpinnerComponent, Home, Login, BytesPipe, SearchPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

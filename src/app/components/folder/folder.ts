@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { APIService, File, Folder } from '../../services/api';
+import {Home} from '../../public/home/home';
 
 @Component({
   selector: 'folder',
@@ -15,7 +16,7 @@ export class FolderComponent {
     loaded : boolean = false;
 
 
-    constructor(private api: APIService) { }
+    constructor(private api: APIService, private home : Home) { }
 
     loadContents() {
         this.api.getFolder(this.folder.id).subscribe(files => {
@@ -34,11 +35,16 @@ export class FolderComponent {
     private restoreFolder(e) {
       e.preventDefault();
       this.api.getFolder(this.folder.id).subscribe(files => {
+        let str : string = "";
+        str += "Restoring: " + this.folder.path + "  { ";
           this.files = files;
           for (let f of this.files){
+            str += f.name + " ";
             this.api.getFileDownload(f.id).subscribe(files => {
             });
         }
+              str += "}"
+              this.home.setMessage(str);
       });
     }
 }
