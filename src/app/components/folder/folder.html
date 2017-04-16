@@ -8,6 +8,7 @@
 
   </ul>
   <div *ngIf="open && files" class="contents">
+    <!-- <search-box (update)="queryString = $event"></search-box> -->
     <file *ngFor="let file of files; let i = index" [file]="file" [even]="i % 2 == 0"></file>
 
   </div>

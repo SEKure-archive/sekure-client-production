@@ -2,8 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({name: 'search'})
 export class SearchPipe implements PipeTransform {
   transform(value: any, input: any) {
-    console.log("Value: " +  value);
-    console.log("Input:" + input);
     if(!input){
       return value;
     } else {

@@ -22,6 +22,7 @@ export interface File {
   name: string;
   mime: string;
   size: number;
+  created: string;
 }
 
 /** A folder. */
@@ -146,5 +147,10 @@ export class APIService {
   // *************************  RESTORE FILES   ********************************
   getFileDownload(id: number) {
     return this.makeRequest(RequestMethod.Get, `/files/${id}/download`, null, true);
+  }
+  // *************************  Search   ********************************
+  postFileByQuery(query: string): Observable<File[]>   {
+    var body = JSON.stringify({ 'query': query});
+    return this.makeRequest(RequestMethod.Post, `/search`, body, true).map(data => data.results);
   }
 }

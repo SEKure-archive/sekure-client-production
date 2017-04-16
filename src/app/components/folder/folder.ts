@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { APIService, File, Folder } from '../../services/api';
 import {Home} from '../../public/home/home';
 
+
 @Component({
   selector: 'folder',
   templateUrl: 'folder.html',
@@ -11,12 +12,12 @@ import {Home} from '../../public/home/home';
 export class FolderComponent {
     @Input() folder: Folder;
 
-    open: boolean = false;
-    files: File[] = null;
-    loaded : boolean = false;
+    @Input() open: boolean = false;
+    @Input() files: File[] = null;
+    @Input() loaded : boolean = false;
 
 
-    constructor(private api: APIService, private home : Home) { }
+    constructor(private api: APIService) { }
 
     loadContents() {
         this.api.getFolder(this.folder.id).subscribe(files => {

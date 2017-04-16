@@ -6,6 +6,7 @@
   </ul>
   <div *ngIf="open" class="contents">
   <button type="submit" class="btn btn-default btn-danger"  (click)="restoreFile($event)">Restore</button>
+    <p>Date: {{file.created}}</p>
     <p>Mime: {{file.mime}}</p>
     <p>Size: {{file.size | bytes}}</p>
   </div>
