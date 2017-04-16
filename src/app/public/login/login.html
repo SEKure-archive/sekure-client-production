@@ -6,12 +6,12 @@
       <form role="form">
         <div class="form-group">
           <label for="username">Username</label>
-          <input [disabled]="working" type="text" #username class="form-control" id="username" placeholder="Username">
+          <input [disabled]="working" type="text" #username class="form-control" id="username" placeholder="Username"  (keyup.enter)="submitForm($event)">
           <div *ngIf="usernameError" class="alert alert-danger" role="alert"><b>Error:</b> {{usernameError}}</div>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
-          <input [disabled]="working" type="password" #password class="form-control" id="password" placeholder="Password">
+          <input [disabled]="working" type="password" #password class="form-control" id="password" placeholder="Password"  (keyup.enter)="submitForm($event)">
           <div *ngIf="passwordError" class="alert alert-danger" role="alert"><b>Error:</b> {{passwordError}}</div>
         </div>
         <a [class.disabled]="working" class="btn btn-default" (click)="toggleLogin()">{{showLogin? "Sign Up" : "Login"}}</a>

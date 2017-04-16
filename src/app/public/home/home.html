@@ -18,7 +18,7 @@
 
     <!-- SEARCH BOX -->
     <div id="toolbar" class="input-group input-group-sm">
-      <input #input input.value='' type="text" [(ngModel)]="queryString" id="search" class="form-control" placeholder="Search">
+      <input #input input.value='' type="text" [(ngModel)]="queryString" id="search" (keyup.enter)=query(input.value) class="form-control" placeholder="Search">
       <span class="input-group-btn">
         <button type="button" class="btn btn-default dropdown" (click)=query(input.value) >Submit</button>
       </span>
