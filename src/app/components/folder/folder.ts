@@ -13,11 +13,11 @@ export class FolderComponent {
     @Input() folder: Folder;
 
     @Input() open: boolean = false;
-    @Input() files: File[] = null;
+    files: File[] = null;
     @Input() loaded : boolean = false;
 
 
-    constructor(private api: APIService) { }
+    constructor(private api: APIService, private home: Home) { }
 
     loadContents() {
         this.api.getFolder(this.folder.id).subscribe(files => {
