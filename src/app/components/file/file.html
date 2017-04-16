@@ -2,7 +2,7 @@
   <ul class="header" (click)="toggleOpen()">
     <li><div *ngIf="open" class="glyphicon glyphicon-chevron-down"></div></li>
     <li><div *ngIf="!open" class="glyphicon glyphicon-chevron-right"></div></li>
-    <li><p>{{file.name}}</p></li>
+    <li><p>{{file.name}}</p>
   </ul>
   <div *ngIf="open" class="contents">
   <button type="submit" class="btn btn-default btn-danger"  (click)="restoreFile($event)">Restore</button>

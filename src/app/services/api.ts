@@ -44,8 +44,8 @@ function convertFolder(data: any): Folder {
 
 @Injectable()
 export class APIService {
-  private URL = 'http://172.17.0.2:80';
-    // private URL = 'https://api.sekurearchive.us';
+  // private URL = 'http://172.17.0.2:80';
+    private URL = 'https://api.sekurearchive.us';
 
   private timeOut = 10000;
   private headerTemplate: Headers;

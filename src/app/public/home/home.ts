@@ -20,7 +20,9 @@ export class Home implements OnInit {
   private working: boolean;
   private folders: Folder[];
   private results : File[];
-  open: boolean = false;
+  private open: boolean = false;
+  private loaded: boolean = false;
+
 
 
 
@@ -28,10 +30,8 @@ export class Home implements OnInit {
   flash: Flash = new Flash();
 
 
-  loadresults : boolean = false;
 
   constructor(public router: Router, private api: APIService, private user: UserService) {
-    // this.searchFolder.path = "Search Folder";
   }
 
   ngOnInit() {
@@ -55,32 +55,23 @@ export class Home implements OnInit {
         this.flash.error = error;
       }
     });
-
-    // this.working = true;
-    //   this.api.postFileByQuery('txt').subscribe(files => {
-    //     this.results = files;
-    //     console.log(this.results);
-    //     this.loadresults= true;
-    //     this.working = false;
-    //     this.open = true;
-    //   });
   }
 
   public setMessage(message : string){
+    message = "Restoring: " + message;
     this.flash.notification = message;
   }
 
 
   query(input: string){
-    this.loadresults = false;
+    this.loaded = false;
 
     console.log(input);
     if(input.length > 0){
       this.working = true;
         this.api.postFileByQuery(input).subscribe(files => {
           this.results = files;
-          console.log(this.results);
-          this.loadresults= true;
+          this.loaded= true;
           this.working = false;
           this.open = true;
         });

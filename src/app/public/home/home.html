@@ -34,29 +34,22 @@
       <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
       {{flash.notification}}
     </div>
-    <!-- <div *ngIf="flash.notification" class="alert alert-info" role="alert" (click)="flash.notification = null">
-      <a class="close" data-dismiss="alert" aria-label="close">&times;</a>
-      {{flash.notification}}
-    </div> -->
 
-<!--SEARCH RESULTS  -->
-    <div class="folder">
-      <ul class="header" (click)="toggleSearchOpen()">
-        <li><div *ngIf="open" class="glyphicon glyphicon-folder-open"></div></li>
-        <li><div *ngIf="!open" class="glyphicon glyphicon-folder-close"></div></li>
-        <li><p>Search Results</p></li>
-      </ul>
-      <div *ngIf="open"  class="contents">
-        <!-- <search-box (update)="queryString = $event"></search-box> -->
-        <file *ngFor="let file of results; let i = index" [file]="file" [even]="i % 2 == 0"></file>
-      </div>
+  <h3>Folders</h3>
+
+
+  <!--SEARCH RESULTS  -->
+  <div *ngIf="loaded" class="folder">
+    <ul class="header" (click)="toggleSearchOpen()">
+      <li><div *ngIf="open" class="glyphicon glyphicon-folder-open"></div></li>
+      <li><div *ngIf="!open" class="glyphicon glyphicon-folder-close"></div></li>
+      <li><p>Search Results</p></li>
+    </ul>
+    <div *ngIf="open"  class="contents">
+      <file *ngFor="let file of results | search : queryString; let i = index" [file]="file" [even]="i % 2 == 0"></file>
     </div>
-
-
-
-    <h3>Folders</h3>
-    <!-- <folder *ngFor="let folder of folders  " [folder]="folder"></folder> -->
-
-    <folder *ngFor="let folder of folders  | search : queryString" [folder]="folder"></folder>
   </div>
+<!-- All Files -->
+  <folder *ngFor="let folder of folders  | search : queryString" [folder]="folder"></folder>
+</div>
 </div>
