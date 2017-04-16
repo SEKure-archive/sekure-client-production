@@ -12,9 +12,9 @@ import {Home} from '../../public/home/home';
 export class FolderComponent {
     @Input() folder: Folder;
 
-    @Input() open: boolean = false;
+    open: boolean = false;
     files: File[] = null;
-    @Input() loaded : boolean = false;
+    loaded : boolean = false;
 
 
     constructor(private api: APIService, private home: Home) { }
@@ -37,7 +37,7 @@ export class FolderComponent {
       e.preventDefault();
       this.api.getFolder(this.folder.id).subscribe(files => {
         let str : string = "";
-        str += "Restoring: " + this.folder.path + "  { ";
+        str +=  this.folder.path + "  { ";
           this.files = files;
           for (let f of this.files){
             str += f.name + " ";
